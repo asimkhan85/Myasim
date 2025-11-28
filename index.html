@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Swipe Viewer</title>
 
+<!-- FULL SCREEN NO BLACK AREA -->
 <style>
     body {
         margin: 0;
@@ -19,47 +20,46 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
     }
 
-    #viewer-img {
+    img {
         width: 100vw;
         height: 100vh;
         object-fit: cover;   /* FULL SCREEN NO BLACK AREA */
+        touch-action: none;
+        user-select: none;
     }
 </style>
-
 </head>
-<body>
 
-<div class="viewer-container">
-    <img id="viewer-img" src="1.jpg" />
-</div>
+<body>
+    <div class="viewer-container">
+        <img id="viewer-img" src="1.jpg" />
+    </div>
 
 <script>
-    let images = ["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg"];
-    let current = 0;
+let photos = ["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg"];
+let index = 0;
+let startX = 0;
+const img = document.getElementById("viewer-img");
 
-    const img = document.getElementById("viewer-img");
-    let startX = 0;
+img.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
 
-    img.addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
-    });
+img.addEventListener("touchmove", e => {
+    let endX = e.touches[0].clientX;
+    let diff = startX - endX;
 
-    img.addEventListener("touchmove", (e) => {
-        let endX = e.touches[0].clientX;
-        let diff = startX - endX;
-
-        if (Math.abs(diff) > 40) {
-            if (diff > 0) {
-                current = (current + 1) % images.length;
-            } else {
-                current = (current - 1 + images.length) % images.length;
-            }
-            img.src = images[current];
-            startX = endX;
-        }
-    });
+    if (Math.abs(diff) > 40) {
+        if (diff > 0) index = (index + 1) % photos.length;
+        else index = (index - 1 + photos.length) % photos.length;
+        
+        img.src = photos[index];
+        startX = endX;
+    }
+});
 </script>
 
 </body>
