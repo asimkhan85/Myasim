@@ -1,66 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Swipe Viewer</title>
-
-<!-- FULL SCREEN NO BLACK AREA -->
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #000;
-        overflow: hidden;
+  <meta charset="utf-8">
+  <title>Swipe Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
     }
-
-    .viewer-container {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+    #viewer {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
     }
-
-    img {
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;   /* FULL SCREEN NO BLACK AREA */
-        touch-action: none;
-        user-select: none;
+    #viewer img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
     }
-</style>
+  </style>
 </head>
-
 <body>
-    <div class="viewer-container">
-        <img id="viewer-img" src="1.jpg" />
-    </div>
+  <div id="viewer">
+    <img id="spin" src="1.jpg" alt="viewer">
+  </div>
 
-<script>
-let photos = ["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg"];
-let index = 0;
-let startX = 0;
-const img = document.getElementById("viewer-img");
+  <script>
+    const images = ["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg"];
+    let current = 0;
+    const img = document.getElementById("spin");
 
-img.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-});
+    let startX = 0;
 
-img.addEventListener("touchmove", e => {
-    let endX = e.touches[0].clientX;
-    let diff = startX - endX;
+    // Mouse events
+    document.addEventListener("mousedown", e => startX = e.clientX);
+    document.addEventListener("mousemove", e => {
+      if (e.buttons) {
+        let diff = e.clientX - startX;
+        if (Math.abs(diff) > 20) {
+          if (diff < 0) current = (current + 1) % images.length;
+          else current = (current - 1 + images.length) % images.length;
 
-    if (Math.abs(diff) > 40) {
-        if (diff > 0) index = (index + 1) % photos.length;
-        else index = (index - 1 + photos.length) % photos.length;
-        
-        img.src = photos[index];
-        startX = endX;
-    }
-});
-</script>
+          img.src = images[current];
+          startX = e.clientX;
+        }
+      }
+    });
 
+    // Touch events
+    document.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+    document.addEventListener("touchmove", e => {
+      let x = e.touches[0].clientX;
+      let diff = x - startX;
+
+      if (Math.abs(diff) > 20) {
+        if (diff < 0) current = (current + 1) % images.length;
+        else current = (current - 1 + images.length) % images.length;
+
+        img.src = images[current];
+        startX = x;
+      }
+    });
+  </script>
 </body>
 </html>
