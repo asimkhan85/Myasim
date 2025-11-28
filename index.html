@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>360 Spin</title>
-    <style>
-        body {
-            margin: 0;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        img {
-            width: 350px;
-            height: auto;
-        }
-    </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swipe Image Viewer</title>
+<style>
+  body { margin:0; background:#000; }
+  img { width:100%; height:auto; display:block; }
+</style>
 </head>
 <body>
 
-<img id="spin" src="1.jpg">
+<img id="viewer" src="1.jpg">
 
 <script>
-let total = 6;        // <<-- Tumhari total images yahan likhi hain
-let current = 1;      
+let images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
+let index = 0;
 
-document.addEventListener("mousemove", function(event) {
-    let speed = 0.2;
-    current += event.movementX * speed;
+let startX = 0;
 
-    if (current < 1) current = total;
-    if (current > total) current = 1;
+document.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
 
-    document.getElementById("spin").src = Math.round(current) + ".jpg";
+document.addEventListener("touchend", e => {
+  let endX = e.changedTouches[0].clientX;
+
+  if (endX < startX - 50) {
+    // Left swipe → next image
+    index = (index + 1) % images.length;
+  } 
+  else if (endX > startX + 50) {
+    // Right swipe → previous image
+    index = (index - 1 + images.length) % images.length;
+  }
+
+  document.getElementById("viewer").src = images[index];
 });
 </script>
 
