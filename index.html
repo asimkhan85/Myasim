@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html>
-<body style="margin:0; background:#111; display:flex; justify-content:center; align-items:center; height:100vh;">
+<head>
+    <meta charset="UTF-8">
+    <title>360 Spin</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        img {
+            width: 350px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
 
-<img id="spin" src="1.jpg" style="width:90%; max-width:450px;">
+<img id="spin" src="1.jpg">
 
 <script>
-let frame = 1;
-let total = 6;  // number of photos
+let total = 6;        // <<-- Tumhari total images yahan likhi hain
+let current = 1;      
 
-document.addEventListener("mousemove", (e) => {
-    if (e.movementX > 2 || e.movementX < -2) {
-        frame += (e.movementX > 0) ? 1 : -1;
-        if (frame > total) frame = 1;
-        if (frame < 1) frame = total;
-        document.getElementById("spin").src = frame + ".jpg";
-    }
+document.addEventListener("mousemove", function(event) {
+    let speed = 0.2;
+    current += event.movementX * speed;
+
+    if (current < 1) current = total;
+    if (current > total) current = 1;
+
+    document.getElementById("spin").src = Math.round(current) + ".jpg";
 });
 </script>
 
