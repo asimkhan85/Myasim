@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0; background:#111; display:flex; justify-content:center; align-items:center; height:100vh;">
+
+<img id="spin" src="1.jpg" style="width:90%; max-width:450px;">
+
+<script>
+let frame = 1;
+let total = 4;  // number of photos
+
+document.addEventListener("mousemove", (e) => {
+    if (e.movementX > 2 || e.movementX < -2) {
+        frame += (e.movementX > 0) ? 1 : -1;
+        if (frame > total) frame = 1;
+        if (frame < 1) frame = total;
+        document.getElementById("spin").src = frame + ".jpg";
+    }
+});
+</script>
+
+</body>
+</html>
