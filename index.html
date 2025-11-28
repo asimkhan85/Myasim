@@ -1,57 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>360 Swipe Viewer</title>
-
-<style>
-    body {
-        margin: 0;
-        background: #000;
-        overflow: hidden;
+  <meta charset="utf-8">
+  <title>360 Swipe Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
     }
     #viewer {
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-        touch-action: none;
+      width: 100%;
+      height: 100%;
     }
-</style>
-
+    #viewer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;  /* contain se cover me change kiya */
+    }
+  </style>
 </head>
 <body>
+  <div id="viewer">
+    <img id="spin" src="1.jpg">
+  </div>
 
-<img id="viewer" src="1.jpg">
+  <script>
+    const images = ["1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg"];
+    let current = 0;
+    const img = document.getElementById("spin");
 
-<script>
-let images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
-let current = 0;
-
-const img = document.getElementById("viewer");
-let startX = 0;
-
-// TOUCH START
-img.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-});
-
-// TOUCH MOVE
-img.addEventListener("touchmove", e => {
-    let endX = e.touches[0].clientX;
-    let diff = startX - endX;
-
-    if (Math.abs(diff) > 20) {
-        if (diff > 0) {
-            current = (current + 1) % images.length;
-        } else {
-            current = (current - 1 + images.length) % images.length;
-        }
-        img.src = images[current];
-        startX = endX;
+    function showImage() {
+      img.src = images[current];
     }
-});
-</script>
 
+    document.body.addEventListener("mousedown", e => {
+      current = (current + 1) % images.length;
+      showImage();
+    });
+    document.body.addEventListener("touchstart", e => {
+      current = (current + 1) % images.length;
+      showImage();
+    });
+  </script>
 </body>
 </html>
